@@ -24,6 +24,7 @@
       <TodoHeader />
       <TodoList
         v-bind:propsdata="todoItems"
+        @finishTodo="finishTodo"
         @removeTodo="removeTodo"
       ></TodoList>
     </v-main>
@@ -72,9 +73,19 @@ export default {
         todoObj.id = 1;
       }
 
-      todoObj = { ...todoObj, status: "todo", title: title || "", content: content || "" };
+      todoObj = { ...todoObj, state: "todo", title: title || "", content: content || "" };
 
       this.todoItems.push(todoObj);
+      localStorage.setItem("todo", JSON.stringify(this.todoItems));
+    },
+    finishTodo(id) {
+      this.todoItems = this.todoItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, state: "done" };
+        } else {
+          return item;
+        }
+      });
       localStorage.setItem("todo", JSON.stringify(this.todoItems));
     },
     removeTodo(id) {

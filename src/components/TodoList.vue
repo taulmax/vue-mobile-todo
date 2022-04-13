@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <transition-group class="pl-0" name="list" tag="ul">
-      <v-card class="mb-2 " v-for="(todoItem) in propsdata" :key="todoItem.id">
+      <v-card class="mb-2 " v-for="(todoItem) in propsdata" :key="todoItem.id" v-show="(todoItem.state === 'todo')">
         <v-card-actions>
           <v-list-item>
-            <v-list-item-avatar>
+            <v-list-item-avatar @click="finishTodo(todoItem.id)">
               <v-icon class="grey lighten-1" dark> mdi-check </v-icon>
             </v-list-item-avatar>
 
@@ -28,6 +28,9 @@
 export default {
   props: ["propsdata"],
   methods: {
+    finishTodo(id) {
+      this.$emit("finishTodo", id);
+    },
     removeTodo(id) {
       this.$emit("removeTodo", id);
     },

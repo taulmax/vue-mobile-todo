@@ -27,7 +27,7 @@
 
             <!-- 제목만 간단하게 제출하는 버튼: 입력값이 있을 때 보임 -->
             <v-btn
-                v-if="newTodoItem"
+                v-else
                 class="mx-2"
                 fab
                 dark
