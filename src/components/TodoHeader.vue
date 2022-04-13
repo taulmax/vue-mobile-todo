@@ -10,6 +10,7 @@
 export default {
   props: ["propsdata"],
   methods: {
+    // 할 일 상태인 것들의 개수를 구해주는 메서드
     getTodoItemsLength() {
       return this.propsdata.filter((item) => item.state === "todo").length;
     }

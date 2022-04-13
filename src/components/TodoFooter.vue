@@ -11,6 +11,7 @@
 <script>
 export default {
   methods: {
+    // 전체 삭제
     clearTodo() {
       this.$emit("removeAll");
     },

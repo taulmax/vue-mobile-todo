@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <transition-group class="pl-0" name="list" tag="ul">
+      <!-- 상태가 todo인것만 보여줌 (v-show) -->
       <v-card class="mb-2 " v-for="(todoItem) in propsdata" :key="todoItem.id" v-show="(todoItem.state === 'todo')">
         <v-card-actions>
           <v-list-item class="list_item">
@@ -108,20 +109,25 @@ export default {
   props: ["propsdata"],
   data() {
     return {
-      selectedTodo: null,
-      selectedTodoTitle: "",
-      selectedTodoMemo: "",
-      showDialog: false,
-      updateMode: false,
+      selectedTodo: null,  // 선택된 투두아이템 (전체) // 취소 눌렀을때 돌아가게 할려고 만들었음
+      selectedTodoTitle: "", // 선택된 투두 아이템의 제목
+      selectedTodoMemo: "",  // 선택된 투두 아이템의 메모
+      showDialog: false,  // 상세보기 보여줄건지 말건지
+      updateMode: false,  // 수정모드인지 아닌지
     }
   },
   methods: {
+    // 할 일 완료
     finishTodo(id) {
       this.$emit("finishTodo", id);
     },
+
+    // 할 일 삭제
     removeTodo(id) {
       this.$emit("removeTodo", id);
     },
+
+    // 상세보기 보여주기 (여기서 selectedTodo를 세팅함)
     showTodoDetail(id) {
       const selectedTodo = this.propsdata.find((item) => item.id === id);
       this.selectedTodo = selectedTodo;
@@ -129,6 +135,8 @@ export default {
       this.selectedTodoMemo = selectedTodo.memo;
       this.showDialog = true;
     },
+
+    // 상세보기 닫기 (다 초기화)
     closeTodoDetail() {
       this.selectedTodo = null;
       this.selectedTodoTitle = "";
@@ -136,28 +144,40 @@ export default {
       this.showDialog = false;
       this.updateMode = false;
     },
+
+    // 수정 모드 진입 (Text Input 눌렀을때 수정모드 진입할 수 있게 하기 위함)
     openUpdateMode() {
       if (!this.updateMode) {
         this.updateMode = true;
       }
     },
+
+    // 완료 버튼 클릭
     clickFinish() {
       this.finishTodo(this.selectedTodo.id);
       this.showDialog = false;
     },
+
+    // 편집 버튼 클릭
     clickEdit() {
       this.updateMode = true;
     },
+
+    // 삭제 버튼 클릭
     clickDelete() {
       this.removeTodo(this.selectedTodo.id);
       this.showDialog = false;
     },
+
+    // 취소 버튼 클릭
     clickCancel() {
       const { title, memo } = this.selectedTodo;
       this.selectedTodoTitle = title;
       this.selectedTodoMemo = memo;
       this.updateMode = false;
     },
+
+    // 저장 버튼 클릭
     clickSave() {
       this.$emit("updateTodo", { id: this.selectedTodo.id, title: this.selectedTodoTitle, memo: this.selectedTodoMemo });
       this.selectedTodo = { ...this.selectedTodo, title: this.selectedTodoTitle, memo: this.selectedTodoMemo };

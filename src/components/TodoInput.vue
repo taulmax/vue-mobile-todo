@@ -41,6 +41,7 @@
             </v-btn>
         </v-row>
 
+        <!-- 경고창 모달 -->
         <modal v-if="showModal" @close="showModal = false">
             <h3 slot="header">경고</h3>
             <span slot="footer" @click="showModal = false">할 일을 입력하세요.
@@ -48,6 +49,7 @@
             </span>
         </modal>
 
+        <!-- 상세보기 다이얼로그 -->
         <v-dialog
             v-model="showDialog"
             fullscreen
@@ -117,31 +119,41 @@ import Modal from './common/AlertModal.vue'
 export default {
     data() {
         return {
-            newTodoItem: '',
-            newTodoTitle: '',
-            newTodoMemo: '',
-            showModal: false,
-            showDialog: false,
+            newTodoItem: '',  // 제목만 있는 입력값
+            newTodoTitle: '', // 상세보기 입력창에서의 제목
+            newTodoMemo: '',  // 상세보기 입력창에서의 메모
+            showModal: false,  // 경고창 띄워줄건지
+            showDialog: false,  // 상세보기 띄워줄건지
         }
     },
     methods: {
+        // 제목만 투두리스트에 등록하는 메서드
         addTodoTitle() {
+            // 입력한게 있으면 등록
             if (this.newTodoItem !== "") {
                 var title = this.newTodoItem && this.newTodoItem.trim();
-                this.$emit('addTodo', { title })
+                this.$emit('addTodo', { title });
                 this.clearInput();
+
+            // 없으면 경고창!!!!
             } else {
                 this.showModal = !this.showModal;
             }
         },
+
+        // 상세보기에서의 저장 (제목 + 메모 둘다 한번에 저장)
         addFullTodo() {
             this.$emit('addTodo', { title: this.newTodoTitle, memo: this.newTodoMemo });
             this.clearDialogInput();
             this.showDialog = false;
         },
+
+        // 입력값 초기화
         clearInput() {
             this.newTodoItem = '';
         },
+
+        // 상세보기 입력값 초기화
         clearDialogInput() {
             this.newTodoTitle = '';
             this.newTodoMemo = '';
