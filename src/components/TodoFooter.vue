@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="text-center">
     <div class="clearAllContainer">
-      <span class="clearAllBtn" @click="clearTodo">Clear All</span>
+      <span class="clearAllBtn pb-3" @click="clearTodo">Clear All</span>
     </div>
     </v-row>
   </v-container>

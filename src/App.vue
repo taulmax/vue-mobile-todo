@@ -124,7 +124,9 @@ body {
   overflow-x: hidden;
 }
 .shadow {
-  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(181,181,181,1);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(181,181,181,1);
+  box-shadow: 0px 0px 5px 0px rgba(181,181,181,1);
 }
 </style>
 
