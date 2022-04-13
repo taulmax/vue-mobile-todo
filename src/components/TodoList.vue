@@ -160,6 +160,7 @@ export default {
     },
     clickSave() {
       this.$emit("updateTodo", { id: this.selectedTodo.id, title: this.selectedTodoTitle, memo: this.selectedTodoMemo });
+      this.selectedTodo = { ...this.selectedTodo, title: this.selectedTodoTitle, memo: this.selectedTodoMemo };
       this.updateMode = false;
     }
   },
