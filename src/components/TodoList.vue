@@ -8,7 +8,7 @@
               <v-icon class="grey lighten-1" dark> mdi-check </v-icon>
             </v-list-item-avatar>
 
-            <v-list-item-content>
+            <v-list-item-content @click="showTodoDetail(todoItem.id)">
               <v-list-item-title v-text="todoItem.title"></v-list-item-title>
             </v-list-item-content>
 
@@ -21,12 +21,100 @@
         </v-card-actions>
       </v-card>
     </transition-group>
+
+    <v-dialog
+      v-model="showDialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+        <v-card>
+            <v-toolbar
+                dark
+                color="primary"
+            >
+                <v-btn
+                    icon
+                    dark
+                    @click="closeTodoDetail()"
+                >
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Detail</v-toolbar-title>
+            </v-toolbar>
+            <v-list>
+                <v-list-item>
+                    <v-text-field
+                        label="할 일"
+                        hide-details
+                        outlined
+                        :readonly="updateMode ? false : true"
+                        v-model="selectedTodoTitle"
+                        @click="openUpdateMode()"
+                        class="pa-4"
+                    ></v-text-field>
+                </v-list-item>
+                <v-list-item>
+                    <v-textarea
+                        label="메모"
+                        hide-details
+                        outlined
+                        :readonly="updateMode ? false : true"
+                        v-model="selectedTodoMemo"
+                        @click="openUpdateMode()"
+                        no-resize
+                        class="pa-4"
+                    ></v-textarea>
+                </v-list-item>
+            </v-list>
+            <v-bottom-navigation fixed>
+                <v-row no-gutters v-if="!updateMode">
+                    <v-col>
+                        <v-btn block height="100%" @click="clickFinish()">
+                            <span>완료</span>
+                        </v-btn>
+                    </v-col>
+                    <v-col>
+                        <v-btn block height="100%" @click="clickEdit()">
+                            <span>편집</span>
+                        </v-btn>
+                    </v-col>
+                    <v-col>
+                        <v-btn block height="100%" @click="clickDelete()">
+                            <span>삭제</span>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                <v-row no-gutters v-else>
+                    <v-col>
+                        <v-btn block height="100%" @click="clickCancel()">
+                            <span>취소</span>
+                        </v-btn>
+                    </v-col>
+                    <v-col>
+                        <v-btn block height="100%" @click="clickSave()">
+                            <span>저장</span>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-bottom-navigation>
+        </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 export default {
   props: ["propsdata"],
+  data() {
+    return {
+      selectedTodo: null,
+      selectedTodoTitle: "",
+      selectedTodoMemo: "",
+      showDialog: false,
+      updateMode: false,
+    }
+  },
   methods: {
     finishTodo(id) {
       this.$emit("finishTodo", id);
@@ -34,6 +122,46 @@ export default {
     removeTodo(id) {
       this.$emit("removeTodo", id);
     },
+    showTodoDetail(id) {
+      const selectedTodo = this.propsdata.find((item) => item.id === id);
+      this.selectedTodo = selectedTodo;
+      this.selectedTodoTitle = selectedTodo.title;
+      this.selectedTodoMemo = selectedTodo.memo;
+      this.showDialog = true;
+    },
+    closeTodoDetail() {
+      this.selectedTodo = null;
+      this.selectedTodoTitle = "";
+      this.selectedTodoMemo = "";
+      this.showDialog = false;
+      this.updateMode = false;
+    },
+    openUpdateMode() {
+      if (!this.updateMode) {
+        this.updateMode = true;
+      }
+    },
+    clickFinish() {
+      this.finishTodo(this.selectedTodo.id);
+      this.showDialog = false;
+    },
+    clickEdit() {
+      this.updateMode = true;
+    },
+    clickDelete() {
+      this.removeTodo(this.selectedTodo.id);
+      this.showDialog = false;
+    },
+    clickCancel() {
+      const { title, memo } = this.selectedTodo;
+      this.selectedTodoTitle = title;
+      this.selectedTodoMemo = memo;
+      this.updateMode = false;
+    },
+    clickSave() {
+      this.$emit("updateTodo", { id: this.selectedTodo.id, title: this.selectedTodoTitle, memo: this.selectedTodoMemo });
+      this.updateMode = false;
+    }
   },
 };
 </script>

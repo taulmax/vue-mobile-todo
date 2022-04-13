@@ -11,32 +11,24 @@
           width="40"
         />
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn text>
-        <span>More</span>
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
     </v-app-bar>
 
     <v-main>
-      <TodoHeader />
+      <TodoHeader v-bind:propsdata="todoItems" />
       <TodoList
         v-bind:propsdata="todoItems"
         @finishTodo="finishTodo"
+        @updateTodo="updateTodo"
         @removeTodo="removeTodo"
       ></TodoList>
+      <TodoFooter v-if="todoItems.length > 0" v-on:removeAll="clearAll" />
     </v-main>
     <TodoInput v-on:addTodo="addTodo"></TodoInput>
-    <!-- <v-footer color="primary">
-      <TodoFooter v-on:removeAll="clearAll" />
-    </v-footer> -->
   </v-app>
 </template>
 
 <script>
-// import TodoFooter from "./components/TodoFooter.vue";
+import TodoFooter from "./components/TodoFooter.vue";
 import TodoHeader from "./components/TodoHeader.vue";
 import TodoList from "./components/TodoList.vue";
 import TodoInput from "./components/TodoInput.vue";
@@ -46,7 +38,7 @@ export default {
 
   components: {
     TodoList,
-    // TodoFooter,
+    TodoFooter,
     TodoHeader,
     TodoInput,
   },
@@ -57,10 +49,6 @@ export default {
     };
   },
   methods: {
-    clearAll() {
-      localStorage.clear();
-      this.todoItems = [];
-    },
     addTodo(todoItem) {
       const { title, memo } = todoItem;
 
@@ -88,9 +76,18 @@ export default {
       });
       localStorage.setItem("todo", JSON.stringify(this.todoItems));
     },
+    updateTodo(todo) {
+      const updatedTodoIndex = this.todoItems.findIndex((item) => item.id === todo.id);
+      this.todoItems[updatedTodoIndex] = { ...todo, state: "todo" };
+      localStorage.setItem("todo", JSON.stringify(this.todoItems));
+    },
     removeTodo(id) {
       this.todoItems = this.todoItems.filter((item) => item.id !== id);
       localStorage.setItem("todo", JSON.stringify(this.todoItems));
+    },
+    clearAll() {
+      localStorage.clear();
+      this.todoItems = [];
     },
   },
   created() {
