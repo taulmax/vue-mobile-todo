@@ -1,7 +1,7 @@
 <template>
 <v-container>
   <v-row justify="center">  
-    <h1>{{propsdata.length > 0 ? propsdata.length + "개의 할일이 남아있어요!" : "한가하시네요!"}}</h1>  
+    <h1>{{getTodoItemsLength() > 0 ? getTodoItemsLength() + "개의 할일이 남아있어요!" : "한가하시네요!"}}</h1>  
   </v-row>
 </v-container>
 </template>
@@ -9,6 +9,11 @@
 <script>
 export default {
   props: ["propsdata"],
+  methods: {
+    getTodoItemsLength() {
+      return this.propsdata.filter((item) => item.state === "todo").length;
+    }
+  }
 }
 </script>
 

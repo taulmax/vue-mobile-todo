@@ -22,7 +22,7 @@
           @updateTodo="updateTodo"
           @removeTodo="removeTodo"
         ></TodoList>
-        <TodoFooter v-if="todoItems.length > 0" v-on:removeAll="clearAll" />
+        <TodoFooter v-if="getTodoItemsLength() > 0" v-on:removeAll="clearAll" />
       </div>
     </v-main>
     <TodoInput v-on:addTodo="addTodo"></TodoInput>
@@ -51,6 +51,9 @@ export default {
     };
   },
   methods: {
+    getTodoItemsLength() {
+      return this.todoItems.filter((item) => item.state === "todo").length;
+    },
     addTodo(todoItem) {
       const { title, memo } = todoItem;
 
