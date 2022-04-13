@@ -19,6 +19,7 @@
                 fab
                 dark
                 color="deep-orange"
+                @click="showDialog = true"
             >
                 <v-icon dark>
                     mdi-plus
@@ -46,6 +47,67 @@
                 <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
             </span>
         </modal>
+
+        <v-dialog
+            v-model="showDialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+        >
+            <v-card>
+                <v-toolbar
+                    dark
+                    color="primary"
+                >
+                    <v-btn
+                        icon
+                        dark
+                        @click="showDialog = false"
+                    >
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Detail</v-toolbar-title>
+                </v-toolbar>
+                <v-list>
+                    <v-list-item>
+                        <v-text-field
+                            label="할 일"
+                            placeholder="오늘은 무슨 일정이 있으신가요?"
+                            autofocus
+                            hide-details
+                            outlined
+                            v-model="newTodoTitle"
+                            class="pa-4"
+                        ></v-text-field>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-textarea
+                            label="메모"
+                            placeholder="자세한 내용을 적어주세요!"
+                            hide-details
+                            outlined
+                            v-model="newTodoMemo"
+                            no-resize
+                            class="pa-4"
+                        ></v-textarea>
+                    </v-list-item>
+                </v-list>
+                <v-bottom-navigation fixed>
+                    <v-row no-gutters>
+                        <v-col>
+                            <v-btn block height="100%" @click="showDialog = false">
+                                <span>취소</span>
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <v-btn block height="100%" @click="addFullTodo()">
+                                <span>저장</span>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-bottom-navigation>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -56,7 +118,10 @@ export default {
     data() {
         return {
             newTodoItem: '',
-            showModal: false
+            newTodoTitle: '',
+            newTodoMemo: '',
+            showModal: false,
+            showDialog: false,
         }
     },
     methods: {
@@ -69,9 +134,18 @@ export default {
                 this.showModal = !this.showModal;
             }
         },
+        addFullTodo() {
+            this.$emit('addTodo', { title: this.newTodoTitle, memo: this.newTodoMemo });
+            this.clearDialogInput();
+            this.showDialog = false;
+        },
         clearInput() {
             this.newTodoItem = '';
-        }
+        },
+        clearDialogInput() {
+            this.newTodoTitle = '';
+            this.newTodoMemo = '';
+        },
     },
     components: {
         Modal: Modal

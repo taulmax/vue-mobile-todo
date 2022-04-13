@@ -62,7 +62,7 @@ export default {
       this.todoItems = [];
     },
     addTodo(todoItem) {
-      const { title, content } = todoItem;
+      const { title, memo } = todoItem;
 
       let todoObj = {};
 
@@ -73,7 +73,7 @@ export default {
         todoObj.id = 1;
       }
 
-      todoObj = { ...todoObj, state: "todo", title: title || "", content: content || "" };
+      todoObj = { ...todoObj, state: "todo", title: title || "", memo: memo || "" };
 
       this.todoItems.push(todoObj);
       localStorage.setItem("todo", JSON.stringify(this.todoItems));
