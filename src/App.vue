@@ -14,14 +14,16 @@
     </v-app-bar>
 
     <v-main>
-      <TodoHeader v-bind:propsdata="todoItems" />
-      <TodoList
-        v-bind:propsdata="todoItems"
-        @finishTodo="finishTodo"
-        @updateTodo="updateTodo"
-        @removeTodo="removeTodo"
-      ></TodoList>
-      <TodoFooter v-if="todoItems.length > 0" v-on:removeAll="clearAll" />
+      <div class="main_wrapper">
+        <TodoHeader v-bind:propsdata="todoItems" />
+        <TodoList
+          v-bind:propsdata="todoItems"
+          @finishTodo="finishTodo"
+          @updateTodo="updateTodo"
+          @removeTodo="removeTodo"
+        ></TodoList>
+        <TodoFooter v-if="todoItems.length > 0" v-on:removeAll="clearAll" />
+      </div>
     </v-main>
     <TodoInput v-on:addTodo="addTodo"></TodoInput>
   </v-app>
@@ -99,9 +101,27 @@ export default {
 </script>
 
 <style>
+html {
+  height: 100vh;
+  overflow: hidden !important;
+}
 body {
+  height: 100%;
   text-align: center;
   background-color: #f6f6f8;
+}
+#app {
+  height: 100%;
+}
+.v-main {
+  height: 100%;
+  padding: 0 !important;
+  margin: 56px 0px 88px 0px !important; 
+}
+.main_wrapper {
+  height: calc(100% - 56px - 88px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .shadow {
   box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03);

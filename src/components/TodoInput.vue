@@ -9,7 +9,7 @@
                 rounded
                 hide-details
                 v-model="newTodoItem"
-                v-on:keydown.enter="addTodoTitle"
+                v-on:keyup.enter="addTodoTitle"
             ></v-text-field>
 
             <!-- 제목 + 내용 입력할 수 있는 UI를 띄워주는 버튼: 입력값이 없을 때 보임 -->
@@ -154,4 +154,11 @@ export default {
 </script>
 
 <style scoped>
+.inputBox {
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+}
 </style>
