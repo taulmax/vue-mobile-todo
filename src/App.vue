@@ -33,7 +33,7 @@
 import TodoFooter from "./components/TodoFooter.vue";
 import TodoHeader from "./components/TodoHeader.vue";
 import TodoList from "./components/TodoList.vue";
-import TodoInput from "./components/TodoInput.vue"; 
+import TodoInput from "./components/TodoInput.vue";  
 
 export default {
   name: "App",
